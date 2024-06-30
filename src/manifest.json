@@ -1,12 +1,22 @@
 {
 	"manifest_version": 2,
 	"name": "ORAC+",
-	"version": "0.1",
+	"version": "0.2",
 	"description": "Utility browser extension for ORAC",
 	"content_scripts": [
 		{
-			"matches": ["*://orac2.info/hub/personal/"],
-			"js": ["oracPlus.js"]
+			"matches": ["*://orac2.info/hub/personal/", "*://orac.amt.edu.au/hub/personal/"],
+			"js": ["common/oracPlus.js", "common/hofCounter.js", "problemList.js"],
+			"css": ["styles/hofCountBadge.css"]
+		},
+		{
+			"matches": ["*://orac2.info/problem/*", "*://orac.amt.edu.au/problem/*"],
+			"js": ["common/oracPlus.js", "common/hofCounter.js", "problemStatement.js"],
+			"css": ["styles/hofCountBadge.css"]
 		}
-	]
+	],
+	"icons": {
+		"48": "assets/logo_48x48.png",
+		"96": "assets/logo_96x96.png"
+	}
 }

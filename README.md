@@ -1,2 +1,10 @@
-# orac-plus
- Utility browser extension for ORAC
+# ORAC+
+Utility browser extension for [ORAC](https://orac2.info)
+
+![ORAC+ logo](assets/logo_200x200.png)
+
+## Features
+- Hall of Fame count on problem list page and problem statements
+
+## Aim
+To enhance the ORAC user experience through scraping available data in a bandwidth-conserving manner.
