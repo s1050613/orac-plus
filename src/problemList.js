@@ -14,17 +14,15 @@ function addAllHofCounts(hofDB) {
 }
 function addHofCountBadge(hofDB, a) {
 	getHofCount(hofDB, a.href).then(({ count, date }) => {
-		let title = `${count} users have solved this problem as of ${date.toLocaleString()}`;
-		a.parentElement.nextElementSibling.innerHTML += `
-			<span class="badge badge-hof-count" title="${title}">${count}${personEmoji}</span>
-		`;
-	}).catch(e => {
-		throw e;
+		getPersonEmoji.then(personEmoji => {
+			let title = `${count} users have solved this problem as of ${date.toLocaleString()}`;
+			a.parentElement.nextElementSibling.innerHTML += `
+				<span class="badge badge-hof-count" title="${title}">${count}${personEmoji}</span>
+			`;
+		});
 	});
 }
 
 openHofDB().then(hofDB => {
 	addAllHofCounts(hofDB);
-}).catch(e => {
-	throw e;
 });

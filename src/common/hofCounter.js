@@ -11,16 +11,21 @@ let { getHofCount, openHofDB } = (() => {
 	 */
 	async function getHofCount(db, problemLink) {
 		let hofLink = problemLink + "hof";
-		if(db) {
-			let cachedItem = await getFromCache(db, hofLink);
-			if(cachedItem) {
-				let age = new Date() - cachedItem.date;
-				if(!CACHE_EXPIRES || age < CACHE_EXPIRY_TIME) {;
-					return cachedItem;
+		let count;
+		if(hofLink == location.href) {
+			count = scrapeHofCountFromDoc(document);
+		} else {
+			if(db) {
+				let cachedItem = await getFromCache(db, hofLink);
+				if(cachedItem) {
+					let age = new Date() - cachedItem.date;
+					if(!CACHE_EXPIRES || age < CACHE_EXPIRY_TIME) {;
+						return cachedItem;
+					}
 				}
 			}
+			count = await fetchHofCount(hofLink);
 		}
-		let count = await fetchHofCount(hofLink);
 		let date = new Date();
 		db && addHofCountToCache(db, hofLink, count);
 		return { count, date, hofLink };
@@ -37,16 +42,14 @@ let { getHofCount, openHofDB } = (() => {
 			throw new Error("Too many fetch requests for ORAC... we wouldn't be having these problems if we had an API would we now 🤨");
 		}
 		let html = await res.text();
-		if(html.includes("Nobody has scored points on this problem yet. You could be the first!")) {
-			return 0;
-		}
 		let parser = new DOMParser();
-		let doc = parser.parseFromString(html, "text/html").documentElement;
-		
-		// The ones with the list, idk if this is accurate or not.
-		let leaderboardGrid = doc.querySelector(".leaderboard-grid");
-		if(leaderboardGrid) {
-			return leaderboardGrid.childElementCount;
+		let doc = parser.parseFromString(html, "text/html");
+		return scrapeHofCountFromDoc(doc);
+	}
+	
+	function scrapeHofCountFromDoc(doc) {
+		if(doc.body.innerText.includes("Nobody has scored points on this problem yet. You could be the first!")) {
+			return 0;
 		}
 		
 		// Regular pages (95% of the time)
@@ -55,7 +58,18 @@ let { getHofCount, openHofDB } = (() => {
 			return b.innerText;
 		}
 		
-		throw new Error(`Fetch HoF count error: ${res.errorCode}`);
+		// The ones with the list, idk if this is accurate or not.
+		let leaderboardGridButActuallyList = doc.querySelector(".leaderboard-grid");
+		if(leaderboardGridButActuallyList) {
+			let count = leaderboardGridButActuallyList.childElementCount;
+			if(count == 10) {
+				return "10+"; // Limited to 10 entries on these questions :(
+			} else {
+				return count;
+			}
+		}
+		
+		throw new Error(`Fetch HoF count error: ${doc}`);
 	}
 	
 	/**

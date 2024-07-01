@@ -1,8 +1,9 @@
 {
 	"manifest_version": 2,
 	"name": "ORAC+",
-	"version": "0.2",
+	"version": "0.3",
 	"description": "Utility browser extension for ORAC",
+	"permissions": ["storage"],
 	"content_scripts": [
 		{
 			"matches": ["*://orac2.info/hub/personal/", "*://orac.amt.edu.au/hub/personal/"],
@@ -15,6 +16,14 @@
 			"css": ["styles/hofCountBadge.css"]
 		}
 	],
+	"browser_action": {
+		"default_popup": "toolbarMenu.html",
+		"default_icon": {
+			"16": "assets/logo_16x16.png",
+			"32": "assets/logo_32x32.png",
+			"64": "assets/logo_64x64.png"
+		}
+	},
 	"icons": {
 		"48": "assets/logo_48x48.png",
 		"96": "assets/logo_96x96.png"

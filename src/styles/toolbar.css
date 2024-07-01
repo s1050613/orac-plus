@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Droid+Serif");
+
+body {
+	font-family: "Droid Serif", Arial;
+	background-color: #FBF9ED;
+	text-align: center;
+}
+
+input[name="emojiPreference"] {
+	appearance: none;
+	& + label {
+		padding: 0.25em 0.4em;
+		display: inline-block;
+		width: 80px;
+		border-radius: 0.4em;
+		background-color: #FDE1C4;
+		cursor: pointer;
+		transition: background-color 0.15s;
+	}
+	&:checked {
+		& + label {
+			background-color: #99FF99;
+		}
+	}
+}
