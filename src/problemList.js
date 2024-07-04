@@ -15,7 +15,7 @@ function addAllHofCounts(hofDB) {
 function addHofCountBadge(hofDB, a) {
 	getHofCount(hofDB, a.href).then(({ count, date }) => {
 		getPersonEmoji.then(personEmoji => {
-			let title = `${count} users have solved this problem as of ${date.toLocaleString()}`;
+			let title = `${count} user${count != 1 && "s"} have solved this problem as of ${date.toLocaleString()}`;
 			a.parentElement.nextElementSibling.innerHTML += `
 				<span class="badge badge-hof-count" title="${title}">${count}${personEmoji}</span>
 			`;

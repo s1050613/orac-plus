@@ -3,12 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	let emojiPreference = emojiPreferenceForm.elements.namedItem("emojiPreference");
 	emojiPreferenceForm.addEventListener("change", e => {
 		if(e.target.name == "emojiPreference") {
-			browser.storage.local.set({
+			setLocalExtensionStorage({
 				emojiPreference: emojiPreference.value
 			});
 		}
 	});
-	browser.storage.local.get("emojiPreference").then(pref => {
-		emojiPreference.value = pref.emojiPreference || "mixed";
+	getLocalExtensionStorage("emojiPreference").then(pref => {
+		emojiPreference.value = pref || "mixed";
 	});
 });

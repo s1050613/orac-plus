@@ -1,7 +1,7 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"name": "ORAC+",
-	"version": "0.3",
+	"version": "0.4",
 	"description": "Utility browser extension for ORAC",
 	"permissions": ["storage"],
 	"content_scripts": [
@@ -14,10 +14,15 @@
 			"matches": ["*://orac2.info/problem/*", "*://orac.amt.edu.au/problem/*"],
 			"js": ["common/oracPlus.js", "common/hofCounter.js", "problemStatement.js"],
 			"css": ["styles/hofCountBadge.css"]
+		},
+		{
+			"matches": ["*://orac2.info/problem/*/submission/*", "*://orac2.info/problem/*/hof/*", "*://orac.amt.edu.au/problem/*/submission/*", "*://orac.amt.edu.au/problem/*/hof/*"],
+			"js": ["submission.js"]
 		}
 	],
-	"browser_action": {
+	"action": {
 		"default_popup": "toolbarMenu.html",
+		"default_title": "ORAC+ Settings",
 		"default_icon": {
 			"16": "assets/logo_16x16.png",
 			"32": "assets/logo_32x32.png",

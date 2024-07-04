@@ -83,7 +83,7 @@ let { getHofCount, openHofDB } = (() => {
 				let db = e.target.result;
 				if(e.oldVersion == 0) { // First time
 					db.createObjectStore("hofCounts", {
-						keyPath: "hofLink"
+						keyPath: "problemLink"
 					});
 				}
 			});
@@ -108,8 +108,9 @@ let { getHofCount, openHofDB } = (() => {
 		let transaction = db.transaction(["hofCounts"], "readwrite");
 		let store = transaction.objectStore("hofCounts");
 		
+		let problemLink = hofLink.match(/\/problem\/(\w+)\/hof$/)[1];
 		let date = new Date();
-		let item = { hofLink, count, date };
+		let item = { problemLink, count, date };
 		
 		let req = store.put(item);
 		return new Promise((res, rej) => {
@@ -131,7 +132,8 @@ let { getHofCount, openHofDB } = (() => {
 	function getFromCache(db, hofLink) {
 		let transaction = db.transaction(["hofCounts"], "readonly");
 		let store = transaction.objectStore("hofCounts");
-		let req = store.get(hofLink);
+		let problemLink = hofLink.match(/\/problem\/(\w+)\/hof$/)[1];
+		let req = store.get(problemLink);
 		
 		return new Promise((res, rej) => {
 			req.addEventListener("success", () => {
