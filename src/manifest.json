@@ -17,7 +17,8 @@
 		},
 		{
 			"matches": ["*://orac2.info/problem/*/submission/*", "*://orac2.info/problem/*/hof/*", "*://orac.amt.edu.au/problem/*/submission/*", "*://orac.amt.edu.au/problem/*/hof/*"],
-			"js": ["submission.js"]
+			"js": ["submission.js"],
+			"css": ["styles/sourceCodeCopyButton.css"]
 		}
 	],
 	"action": {

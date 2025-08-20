@@ -1,4 +1,14 @@
+const selectEl = document.querySelector.bind(document);
+const sleep = (millis, abortSignal) => new Promise((res, rej) => {
+	let timeout = setTimeout(res, millis);
+	abortSignal?.addEventListener("abort", () => {
+		clearTimeout(timeout);
+		rej(abortSignal.reason);
+	});
+});
+
 function mean(array) {
+	if(!array.length) return NaN;
 	return array.reduce((a, b) => a + b) / array.length;
 }
 
@@ -53,3 +63,29 @@ overviewTableBody.innerHTML += `
 		<td>Time: μ = ${averageTimeStr}, memory: μ = ${averageMemoryStr}</td>
 	</tr>
 `;
+
+let sourceCodeEl = selectEl("code");
+let copyBtn = document.createElement("button");
+copyBtn.classList.add("sourceCodeCopyButton");
+copyBtn.innerText = "\u{1f4CB}";
+copyBtn.setAttribute("title", "Copy source code");
+
+let ac;
+
+copyBtn.addEventListener("click", async () => {
+	ac?.abort();
+	ac = new AbortController();
+	
+	let sourceCode = sourceCodeEl.innerText.replaceAll("\n\n", "\n").replaceAll(/^\t/gm, "");
+	await navigator.clipboard.writeText(sourceCode);
+	copyBtn.innerText = "\u2714\uFE0F";
+	copyBtn.setAttribute("title", "Copied!");
+	try {
+		await sleep(2500, ac.signal);
+	} catch(e) {
+		return;
+	};
+	copyBtn.innerText = "\u{1f4CB}";
+	copyBtn.setAttribute("title", "Copy source code");
+});
+sourceCodeEl.appendChild(copyBtn);
